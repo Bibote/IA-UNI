@@ -122,12 +122,25 @@ def nullHeuristic(state, problem=None):
     goal in the provided SearchProblem.  This heuristic is trivial.
     """
     return 0
+def sumCosteHeuristico(nodo):
+    return nodo[-1]+ nodo[-2]
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
-
+    visitados = []
+    lista = []
+    lista.append((problem.getStartState(), [],0,heuristic(problem.getStartState(),problem)))
+    while not len(lista)==0:
+        nodo, accion, coste,costeHeuristico = lista.pop()
+        if nodo not in visitados:  
+            visitados.append(nodo)
+            if problem.isGoalState(nodo):
+                return accion
+            for hijo, accion_hijo, coste_hijo in problem.getSuccessors(nodo):
+                if(hijo not in visitados):
+                    lista.append((hijo, accion+[accion_hijo],coste+coste_hijo,heuristic(hijo,problem)))
+            lista.sort(reverse=True,key=sumCosteHeuristico)
 
 # Abbreviations
 bfs = breadthFirstSearch
