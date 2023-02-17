@@ -111,8 +111,16 @@ def uniformCostSearch(problem):
             if problem.isGoalState(nodo):
                 return accion
             for hijo, accion_hijo, coste_hijo in problem.getSuccessors(nodo):
-                lista.append((hijo, accion+[accion_hijo],coste+coste_hijo))
-            lista.sort(reverse=True,key=myFunc)
+                #lista.append((hijo, accion+[accion_hijo],coste+coste_hijo))
+                if(len(lista)==0):
+                    lista.append((hijo, accion+[accion_hijo],coste+coste_hijo))
+                else:
+                    for i in reversed(range(len(lista))):
+                        if lista[i][-1] > coste+coste_hijo:
+                            lista.insert(i+1,(hijo, accion+[accion_hijo],coste+coste_hijo))
+                            break
+                        if i==0:
+                            lista.insert(0,(hijo, accion+[accion_hijo],coste+coste_hijo))
 
                 
 
