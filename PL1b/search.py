@@ -90,6 +90,7 @@ def breadthFirstSearch(problem):
     while not cola.isEmpty():
         nodo, accion = cola.pop()
         if nodo not in visitados:
+            print(nodo)
             visitados.append(nodo)
             if problem.isGoalState(nodo):
                 return accion
