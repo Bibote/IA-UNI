@@ -324,11 +324,11 @@ class CornersProblem(search.SearchProblem):
                 nextState = (nextx, nexty)
                 cost = self.costFn(nextState)
                 if(nextState in self.corners):
-                    visitedCorners = state[1]
+                    visitedCorners = state[1].copy()
                     visitedCorners[self.corners.index(nextState)] = True
                     successors.append( (( nextState,visitedCorners), action, cost) )
                 else:
-                    visitedCorners = state[1]
+                    visitedCorners = state[1].copy()
                     successors.append( (( nextState,state[1]), action, cost) )
                 
         # Bookkeeping for display purposes
