@@ -473,11 +473,10 @@ def foodHeuristic(state, problem):
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
     heur=0
-    xy1 = position
     for comida in foodGrid.asList():
-        xy2 = comida
-        if heur < abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1]):
-            heur = abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
+        distance = util.manhattanDistance(position, comida)
+        if heur < distance:
+            heur = distance
     return heur
 
 class ClosestDotSearchAgent(SearchAgent):
