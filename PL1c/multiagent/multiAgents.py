@@ -30,7 +30,6 @@ class ReflexAgent(Agent):
         """
         # Collect legal moves and successor states
         legalMoves = gameState.getLegalActions()
-
         # Choose one of the best actions
         scores = [self.evaluationFunction(gameState, action) for action in legalMoves]
         bestScore = max(scores)
@@ -57,14 +56,20 @@ class ReflexAgent(Agent):
         to create a masterful evaluation function.
         """
         # Useful information you can extract from a GameState (pacman.py)
+        # pacman should never stop
+        if action == "Stop":
+            return -1E1000
         successorGameState = currentGameState.generatePacmanSuccessor(action)
         newPos = successorGameState.getPacmanPosition()
-        newFood = successorGameState.getFood()
         newGhostStates = successorGameState.getGhostStates()
-        newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
+        distanceToMonster = [util.manhattanDistance(newPos, ghost.getPosition()) for ghost in newGhostStates]
+        distanceToFood = [- util.manhattanDistance(newPos, food) for food in currentGameState.getFood().asList()]
 
-        "*** YOUR CODE HERE ***"
-        return successorGameState.getScore()
+        run = 0
+        if min(distanceToMonster) <= 3:
+            run = -1E10
+
+        return max(distanceToFood) + run
 
 def scoreEvaluationFunction(currentGameState):
     """
