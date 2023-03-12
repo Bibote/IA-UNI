@@ -133,9 +133,9 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns whether or not the game state is a losing state
         """
         "*** YOUR CODE HERE ***"
-        # Collect legal moves and successor states
+        # Collect legal moves of pacman
         legalMoves = gameState.getLegalActions(0)
-        # Choose one of the best actions
+        # Get minimax score
         scores = []
         for action in legalMoves:
             nextGame = gameState.generateSuccessor(0, action)
@@ -144,36 +144,27 @@ class MinimaxAgent(MultiAgentSearchAgent):
         bestIndices = [index for index in range(len(scores)) if scores[index] == bestScore]
         chosenIndex = random.choice(bestIndices)  # Pick randomly among the best
 
-        "Add more of your code here if you want to"
-
         return legalMoves[chosenIndex]
 
     def minimaxEvaluation(self, gameState, currentAgent: int, depth: int):
+        # we reached a terminal point
         if (depth <= 0) | gameState.isWin() | gameState.isLose():
             return self.evaluationFunction(gameState)
         else:
             scores = []
+            # setter for nextAgent
             newAgent = 0
             if currentAgent != gameState.getNumAgents() - 1:
                 newAgent = currentAgent + 1
+
             for action in gameState.getLegalActions(currentAgent):
                 nextGame = gameState.generateSuccessor(currentAgent, action)
                 scores.append(self.minimaxEvaluation(nextGame, newAgent, depth - 1))
+            # agent 0 == pacman, else ghost
             if currentAgent == 0:
                 return max(scores)
             else:
                 return min(scores)
-
-        # if depth > 0 and currentAgent != nagent - 1:
-        #     for action in gameState.getLegalActions(currentAgent):
-        #         nextGame = gameState.generateSuccessor(currentAgent, action)
-        #         self.minimaxEvaluation(nextGame, nagent, currentAgent + 1, depth)
-        # elif depth > 0 and currentAgent == nagent - 1:
-        #     for action in gameState.getLegalActions(currentAgent):
-        #         nextGame = gameState.generateSuccessor(currentAgent, action)
-        #         self.minimaxEvaluation(nextGame, nagent, 0, depth - 1)
-        # elif depth == 0 and currentAgent == nagent - 1:
-        #     return
 
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
