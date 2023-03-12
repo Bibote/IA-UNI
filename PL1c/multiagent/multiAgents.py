@@ -276,9 +276,13 @@ def betterEvaluationFunction(currentGameState):
     Your extreme ghost-hunting, pellet-nabbing, food-gobbling, unstoppable
     evaluation function (question 5).
 
-    DESCRIPTION: <write something here so we know what you did>
+    DESCRIPTION:
+    esta funcion de evaluacion hace una evaluacion del estado actual
+    y devuelve un numero, cuando mayor sea el numero mejor.
+
+    La funcion evalua la puntuacion actual del estado, la distancia a la comida mas cercana,
+    la cantidad de capsulas que quedan en el juego y la distancia que hay del pacman al monstruo mas cercano
     """
-    "*** YOUR CODE HERE ***"
     pos = currentGameState.getPacmanPosition()
     ghostStates = currentGameState.getGhostStates()
     distanceToMonster = [util.manhattanDistance(pos, ghost.getPosition()) for ghost in ghostStates]
