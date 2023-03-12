@@ -176,8 +176,53 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
         """
         Returns the minimax action using self.depth and self.evaluationFunction
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # Collect legal moves of pacman
+        legalMoves = gameState.getLegalActions(0)
+        # Get minimax score
+        scores = []
+        alfa = float("-inf")
+        beta = float("inf")
+        for action in legalMoves:
+            nextGame = gameState.generateSuccessor(0, action)
+            score = self.minimaxEvaluation(nextGame, 1, gameState.getNumAgents() * self.depth - 1, alfa, beta)
+            scores.append(score)
+            alfa = max(alfa, score)
+            if beta < alfa:
+                break
+        bestScore = max(scores)
+        bestIndices = [index for index in range(len(scores)) if scores[index] == bestScore]
+        chosenIndex = random.choice(bestIndices)  # Pick randomly among the best
+
+        return legalMoves[chosenIndex]
+
+    def minimaxEvaluation(self, gameState, currentAgent: int, depth: int, alfa: float, beta: float):
+        # we reached a terminal point
+        if (depth <= 0) | gameState.isWin() | gameState.isLose():
+            return self.evaluationFunction(gameState)
+        else:
+            # setter for nextAgent
+            newAgent = 0
+            if currentAgent != gameState.getNumAgents() - 1:
+                newAgent = currentAgent + 1
+
+            scores = []
+            for action in gameState.getLegalActions(currentAgent):
+                nextGame = gameState.generateSuccessor(currentAgent, action)
+                score = self.minimaxEvaluation(nextGame, newAgent, depth - 1, alfa, beta)
+                scores.append(score)
+                if currentAgent == 0:
+                    alfa = max(alfa, score)
+                    if beta < score:
+                        break
+                else:
+                    beta = min(beta, score)
+                    if alfa > score:
+                        break
+            # agent 0 == pacman, else ghost
+            if currentAgent == 0:
+                return max(scores)
+            else:
+                return min(scores)
 
 
 class ExpectimaxAgent(MultiAgentSearchAgent):
