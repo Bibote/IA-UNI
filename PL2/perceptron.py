@@ -1,5 +1,6 @@
 # perceptron.py
 # -------------
+import math
 import random
 
 # Perceptron implementation
@@ -58,16 +59,19 @@ class PerceptronClassifier:
             print("Starting iteration ", iteration, "...")
             bestWeight = 0
             for index in range(len(trainingData)):
-                for i in trainingData[index]:
-                    sum = []
-                    for j in range(len(self.weights)):
-                        sum.append(trainingData[index].get(i) * self.weights[j][i])
-                    bestWeight = max(enumerate(sum), key=lambda x: x[1])
-                    # update weights
-                    if bestWeight[0] != trainingLabels[index]:
-                        self.weights[bestWeight[0]][i] -= bestWeight[1]
-                        self.weights[trainingLabels[index]][i] += bestWeight[1]
-
+                weightIndex = 0
+                maximumScore = -math.inf
+                for j in range(len(self.weights)):
+                    suma = 0
+                    for i in trainingData[index]:
+                        suma += trainingData[index].get(i) * self.weights[j][i]
+                    if maximumScore < suma:
+                        maximumScore = suma
+                        weightIndex = j
+                if weightIndex != trainingLabels[index]:
+                    for i in trainingData[index]:
+                        self.weights[weightIndex][i] -= trainingData[index].get(i)
+                        self.weights[trainingLabels[index]][i] += trainingData[index].get(i)
     def classify(self, data):
         """
         Classifies each datum as the label that most closely matches the prototype vector
