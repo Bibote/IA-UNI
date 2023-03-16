@@ -79,6 +79,11 @@ class PerceptronClassifier:
         data = DataLoad.loadValidationData()
 
         guesses = []
-        # for i in range(len(data)):
+        for i in range(len(data)):
+            scores = util.Counter()
+            for label in self.legalLabels:
+                scores[label] = self.weights[label] * data[i]
+            guesses.append(scores.argMax())
+        return guesses
 
         return guesses
