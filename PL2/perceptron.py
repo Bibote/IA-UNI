@@ -1,6 +1,6 @@
 # perceptron.py
 # -------------
-
+import random
 
 # Perceptron implementation
 import util
@@ -41,26 +41,32 @@ class PerceptronClassifier:
         datum is a counter from features to values for those features
         (and thus represents a vector a values).
         """
-
-
-
         trainingData = DataLoad.loadTrainingData()
         trainingLabels = DataLoad.loadTrainingLabels()
 
         self.features = trainingData[0].keys()  # could be useful later
-        # DO NOT ZERO OUT YOUR WEIGHTS BEFORE STARTING TRAINING, OR
+
+        # initialize weights to 1
+        for i in self.weights:
+            self.weights[i].incrementAll(self.features, 1)
+
         # THE AUTOGRADER WILL LIKELY DEDUCT POINTS.
         print("Length trainingData: ", len(trainingData))
         print("Length trainingLabels: ", len(trainingLabels))
 
         for iteration in range(self.max_iterations):
             print("Starting iteration ", iteration, "...")
-            score = 0
+            bestWeight = 0
             for index in range(len(trainingData)):
-                sum = 0
                 for i in trainingData[index]:
-                    sum += trainingData[index].get(i) * self.weights[trainingLabels[index]][i]
-                score = max(score, sum)
+                    sum = []
+                    for j in range(len(self.weights)):
+                        sum.append(trainingData[index].get(i) * self.weights[j][i])
+                    bestWeight = max(enumerate(sum), key=lambda x: x[1])
+                    # update weights
+                    if bestWeight[0] != trainingLabels[index]:
+                        self.weights[bestWeight[0]][i] -= bestWeight[1]
+                        self.weights[trainingLabels[index]][i] += bestWeight[1]
 
     def classify(self, data):
         """
