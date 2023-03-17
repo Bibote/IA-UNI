@@ -57,7 +57,6 @@ class PerceptronClassifier:
 
         for iteration in range(self.max_iterations):
             print("Starting iteration ", iteration, "...")
-            bestWeight = 0
             for index in range(len(trainingData)):
                 weightIndex = 0
                 maximumScore = -math.inf
@@ -90,4 +89,3 @@ class PerceptronClassifier:
             guesses.append(scores.argMax())
         return guesses
 
-        return guesses

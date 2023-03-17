@@ -1,10 +1,11 @@
 # mira.py
 # -------
-
+import math
 
 # Mira implementation
 import DataLoad
 import util
+
 PRINT = True
 
 class MiraClassifier:
@@ -61,14 +62,46 @@ class MiraClassifier:
         self.features = trainingData[0].keys()
 
         newWeights = self.weights.copy()
+        listaPesos = []
         for c in Cgrid:
             self.weights = newWeights.copy()
             for iteration in range(self.max_iterations):
                 print ("Starting iteration ", iteration, "...")
-            
-                
-        
-        self.weights = bestWeight        
+                for index in range(len(trainingData)):
+                    weightIndex = 0
+                    maximumScore = -math.inf
+                    for j in range(len(self.weights)):
+                        suma = 0
+                        for i in trainingData[index]:
+                            suma += trainingData[index].get(i) * self.weights[j][i]
+                        if maximumScore < suma:
+                            maximumScore = suma
+                            weightIndex = j
+                    if weightIndex != trainingLabels[index]:
+                        for i in trainingData[index]:
+                            t=min(((self.weights[weightIndex][i]-self.weights[trainingLabels[index]][i])*trainingData[index].get(i)+1)/2*trainingData[index].get(i)*trainingData[index].get(i),c)
+                            self.weights[weightIndex][i] -= trainingData[index].get(i)*t
+                            self.weights[trainingLabels[index]][i] += trainingData[index].get(i)*t
+            listaPesos.append(self.weights.copy())
+        maxScore=0
+        for peso in listaPesos:
+            score=0
+            for index in range(len(validationData)):
+                    weightIndex = 0
+                    maximumScore = -math.inf
+                    for j in range(len(peso)):
+                        suma = 0
+                        for i in validationData[index]:
+                            suma += validationData[index].get(i) * peso[j][i]
+                        if maximumScore < suma:
+                            maximumScore = suma
+                            weightIndex = j
+                        if weightIndex == trainingLabels[index]:
+                            score+=1
+            if score>maxScore:
+                maxScore=score
+                self.weights=peso.copy()
+     
               
     
     
@@ -80,13 +113,14 @@ class MiraClassifier:
 
         Recall that a datum is a util.counter...
         """
-        data=DataLoad.loadValidationData()
-       
+        data = DataLoad.loadValidationData()
+
         guesses = []
-        #for i in range(len(data)):
-
-
-
+        for i in range(len(data)):
+            scores = util.Counter()
+            for label in self.legalLabels:
+                scores[label] = self.weights[label] * data[i]
+            guesses.append(scores.argMax())
         return guesses
 
 
