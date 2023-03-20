@@ -1,0 +1,21 @@
+(deffunction dentroDelRango (?a ?b)
+    (bind ?c (read))
+    (while (not(and(< ?a ?c)(< ?c ?b)))
+        (printout t "No está en el rango" crlf)
+        (bind ?c (read))
+    )
+    (printout t "Está en el rango" crlf)
+)
+(deffunction mcd (?a ?b)
+    (if (eq ?a ?b) then
+        (printout t ?a crlf)
+        (return ?a)
+    else (if (< ?a ?b) then
+        (return (mcd ?a (- ?b ?a))))
+    else (if (< ?b ?a) then
+        (return (mcd (- ?a ?b) ?b)))
+    )
+)
+(deffunction mcm (?a ?b)
+    (printout t (/ (* ?a ?b) (mcd ?a ?b)) crlf)
+)
