@@ -19,3 +19,41 @@
 (deffunction mcm (?a ?b)
     (printout t (/ (* ?a ?b) (mcd ?a ?b)) crlf)
 )
+(deffunction ascendente ($?list)
+    (bind ?out (create$))
+    (bind ?size (length$ ?list))
+    (foreach ?i $?list
+        (if (eq ?size 0) then
+            (bind ?out (insert$ ?out (+ ?size 1) ?i))
+        else
+            (bind ?int 0)
+            (foreach ?j $?out
+                (if (> ?j ?i) then
+                    (break)
+                )
+                (bind ?int (+ ?int 1))
+            )
+            (bind ?out (insert$ ?out (+ ?int 1) ?i))
+        )
+    )
+)
+(deffunction ascendentePar ($?list)
+    (bind ?out (create$))
+    (bind ?size (length$ ?list))
+    (foreach ?i $?list
+        (if (= (mod ?i 2) 0) then
+            (if (eq ?size 0) then
+                (bind ?out (insert$ ?out (+ ?size 1) ?i))
+            else
+                (bind ?int 0)
+                (foreach ?j $?out
+                    (if (> ?j ?i) then
+                        (break)
+                    )
+                    (bind ?int (+ ?int 1))
+                )
+                (bind ?out (insert$ ?out (+ ?int 1) ?i))
+            )
+        )
+    )
+)
