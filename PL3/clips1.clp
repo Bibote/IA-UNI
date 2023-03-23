@@ -75,3 +75,6 @@
     )
     (return ?in)
 )
+(deffunction concatenacion (?in $?in2)
+    (insert$ ?in (+ (length$ ?in) 1) $?in2)
+)
