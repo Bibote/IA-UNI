@@ -57,3 +57,21 @@
         )
     )
 )
+(deffunction diferencia (?in $?in2)
+    (bind ?index 1)
+    (foreach ?i ?in
+        (bind ?found 0)
+        (foreach ?j $?in2
+            (if (eq ?i ?j) then
+                (bind ?found 1)
+                (break)
+            )
+        )
+        (if (= ?found 1) then
+            (bind ?in (delete$ ?in ?index ?index))
+            (bind ?index (- ?index 1))
+        )
+        (bind ?index (+ ?index 1))
+    )
+    (return ?in)
+)
