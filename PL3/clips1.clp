@@ -78,3 +78,12 @@
 (deffunction concatenacion (?in $?in2)
     (insert$ ?in (+ (length$ ?in) 1) $?in2)
 )
+(deffunction cartesiano (?in $?in2)
+    (bind ?out (create$))
+    (foreach ?i ?in
+        (foreach ?j $?in2
+            (bind ?out (insert$ ?out (+ (length$ ?out) 1) ?i ?j))
+        )
+    )
+    (return $?out)
+)
