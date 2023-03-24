@@ -87,3 +87,61 @@
     )
     (return $?out)
 )
+
+(deffunction esPrimo(?n)
+    (bind ?i 2)
+    (while (and (< ?i ?n)(not(= (mod ?n ?i) 0)))
+        (bind ?i (+ ?i 1))
+    )
+    (if (eq ?i ?n) then
+        (return TRUE)
+    else
+        (return FALSE)
+    )
+)
+
+(deffunction esCapicua(?n)
+    (bind ?n2 ?n)
+    (bind ?n3 0)
+    (while (> ?n2 0)
+        (bind ?n3 (+ (* ?n3 10) (mod ?n2 10)))
+        (bind ?n2 (div ?n2 10))
+    )
+    (if (eq ?n ?n3) then
+        (return TRUE)
+    else
+        (return FALSE)
+    )
+)
+
+(deffunction num_primos_y_capicua()
+    (bind ?n (read))
+    (bind ?i 1)
+
+    (while (< ?i ?n)
+        (if (and (esPrimo ?i)(esCapicua ?i)) then
+            (printout t ?i crlf)
+        )
+        (bind ?i (+ ?i 1))
+    )
+)
+
+(deffunction esMedio(?n)
+    (bind ?sumInferiores 0)
+    (bind ?i 1)
+    (while (< ?i ?n)
+        (bind ?sumInferiores (+ ?sumInferiores ?i))
+        (bind ?i (+ ?i 1))
+    )
+    (bind ?sumSuperiores 0)
+    (bind ?i (+ ?n 1))
+    (while (< ?sumSuperiores ?sumInferiores)
+        (bind ?sumSuperiores (+ ?sumSuperiores ?i))
+        (bind ?i (+ ?i 1))
+    )
+    (if (eq ?sumSuperiores ?sumInferiores) then
+        (return TRUE)
+    else
+        (return FALSE)
+    )
+)
